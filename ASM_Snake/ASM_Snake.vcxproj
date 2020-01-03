@@ -126,7 +126,7 @@
     <None Include="data.inc" />
     <None Include="funcs.inc" />
     <None Include="game.inc" />
-    <None Include="subfuncs.inc" />
+    <None Include="gameFuncs.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

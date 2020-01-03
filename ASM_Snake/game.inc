@@ -3,13 +3,28 @@ includelib drd.lib
 
 include data.inc
 include funcs.inc
+include gameFuncs.inc
 
 .data
-	randStm  SYSTEMTIME<>
 	tmpDig100 DWORD 0
 	tmpDig10 DWORD 0
 	tmpDig1 DWORD 0
 .code
+	LoadingScreen proc
+		invoke drd_init, 350, 150, 0
+		invoke drd_imageLoadFile, offset header.HLoad, offset header.HLoadI
+		invoke drd_imageDraw, offset header.HLoadI, 0, 0
+		invoke drd_flip
+		; Wait for space to be pressed
+		WaitForSpaceLoop:
+			invoke WaitForSpace	
+			cmp eax, 1
+			je StartTheGameRet
+			jne WaitForSpaceLoop
+		StartTheGameRet:
+			ret
+	LoadingScreen endp
+
 	Load proc
 		
 		mov field.snakeDir, 1
@@ -57,8 +72,8 @@ include funcs.inc
 			je addToY
 			jne fillWindow
 		doneDrawingWindow:
+			invoke GenerateFruit	
 			invoke drd_flip
-			jmp GenFruit
 		ret
 
 		addToY:
@@ -69,152 +84,18 @@ include funcs.inc
 			cmp bx, gameParams.sheight
 			je doneDrawingWindow
 			jne fillWindow
-
-		GenFruit:
-			invoke GetSystemTime, ADDR randStm
-			movzx eax, randStm.wMilliseconds
-			movzx ebx, randStm.wSecond
-			add eax, ebx
-			mov ecx, 13;snake.Head.x
-			add ecx, 1
-			mul ecx
-			mov edx, 0
-			movzx ebx, gameParams.bW
-			div ebx
-			;add dx, gameParams.reservedSpace
-			mov field.Fruit.x, dx
-			invoke GetSystemTime, ADDR randStm
-			movzx eax, randStm.wMilliseconds
-			movzx ebx, randStm.wSecond
-			add eax, ebx
-			mov ecx, 17;snake.Head.y
-			add ecx, 1
-			mul ecx
-			mov edx, 0
-			movzx ebx, gameParams.bHe
-			div ebx
-			add dx, 1
-			mov field.Fruit.y, dx
-			ret	
 	Load endp
 
 	Update proc
 		invoke drd_processMessages
 		invoke keyboard, offset snake.Head
 
-		;lea edx, offset snake.Head
-		;ASSUME edx: ptr SnakeBody
-		;mov ebx, snake.Head.x
-		;mov [edx + 8].x, ebx
-		;mov ebx, snake.Head.y
-		;mov [edx + 8].y, ebx
-
-		mov field.snakeLenTemp, 0
-		;invoke drd_imageDraw, offset field.greenI, snake.Head.x, snake.Head.y
-
-
-		movzx eax, field.snakeLen
-		sub eax, 1
-		mov ebx, 4
-		mul ebx
-		lea edx, offset snake.Head
-		add edx, eax
-		mov field.snakeAdr, edx
-
-		MovePartOfSnake:
-			add field.snakeLenTemp, 1
-			mov ax, field.snakeLen
-			cmp field.snakeLenTemp, ax
-			je FinishedMove
-			;lea edx, offset snake.Head
-			mov edx, field.snakeAdr
-			sub edx, 4
-			mov field.snakeAdr, edx
-			mov ebx, offset snake.Head
-			ASSUME edx: ptr SnakeBody
-			mov bx, [edx + 0].x
-			mov [edx + 4].x, bx
-			mov bx, [edx + 0].y
-			mov [edx + 4].y, bx
-			;invoke drd_imageDraw, offset field.greenI, [edx + 0].x, [edx + 0].y
-			jmp MovePartOfSnake
-		FinishedMove:
-			invoke moveObject, offset snake.Head
-			invoke amIDead, offset snake.Head
-			jmp CheckFruitEaten1
-			ret
+		invoke MoveSnake ; Moves the body of the snake
+		invoke moveObject, offset snake.Head ; Moves the head of the snake
+		invoke amIDead, offset snake.Head ; Checks if the snake is dead
+		invoke didEatFruit, offset field.Fruit
+		
 		ret
-		CheckFruitEaten1:
-			mov bx, field.Fruit.x
-			movzx eax, gameParams.bFact
-			mul bx
-			movzx ebx, snake.Head.x
-			cmp ebx, eax
-			je CheckFruitEaten2
-			ret
-		CheckFruitEaten2:
-			mov bx, field.Fruit.y
-			movzx eax, gameParams.bFact
-			mul bx
-			movzx ebx, snake.Head.y
-			cmp ebx, eax
-			je FruitEaten
-			ret
-		FruitEaten:
-			add field.snakeLen, 1
-
-			mov ax, field.snakeLen
-			cmp ax, header.highScore
-			jg newHighScore
-			jmp notNewHighScore
-
-			newHighScore:
-				mov bx, field.snakeLen
-				mov header.highScore, bx
-				jmp notNewHighScore
-			notNewHighScore:
-
-			; Move the new part out of the screen (temporarily)
-			movzx eax, field.snakeLen
-			sub eax, 1
-			mov ebx, 4
-			mul ebx
-			lea edx, offset snake.Head
-			add edx, eax
-			mov field.snakeAdr, edx
-
-			mov [edx], -1
-			mov [edx - 2], -1
-
-			jmp GenFruit
-			ret
-
-		GenFruit:
-			invoke GetSystemTime, ADDR randStm
-			movzx eax, randStm.wMilliseconds
-			movzx ebx, randStm.wSecond
-			add eax, ebx
-			mov ecx, 13;snake.Head.x
-			add ecx, 1
-			mul ecx
-			mov edx, 0
-			movzx ebx, gameParams.bW
-			div ebx
-			;add dx, gameParams.reservedSpace
-			mov field.Fruit.x, dx
-			invoke GetSystemTime, ADDR randStm
-			movzx eax, randStm.wMilliseconds
-			movzx ebx, randStm.wSecond
-			add eax, ebx
-			mov ecx, 17;snake.Head.y
-			add ecx, 1
-			mul ecx
-			mov edx, 0
-			movzx ebx, gameParams.bHe
-			div ebx
-			add dx, 1
-			mov field.Fruit.y, dx
-
 	Update endp
 
 	Draw proc

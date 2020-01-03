@@ -1,7 +1,7 @@
 ﻿  Assembling main.asm...
 \masm32\include\masm32rt.inc(33): warning A4011: multiple .MODEL directives found : .MODEL ignored
-funcs.inc(20): warning A6004: procedure argument or local not referenced : adrobj
-funcs.inc(98): warning A6004: procedure argument or local not referenced : adrobj
+funcs.inc(14): warning A6004: procedure argument or local not referenced : adrobj
+funcs.inc(90): warning A6004: procedure argument or local not referenced : adrobj
   drd.lib(drd.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
   Generating code

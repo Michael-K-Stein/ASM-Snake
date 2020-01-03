@@ -89,10 +89,12 @@ Header STRUCT
 	Hd9I Img <>
 	Hd0 BYTE "graphics/header/digits/0.png", 0
 	Hd0I Img <>
+
+	HLoad BYTE "graphics/LoadingScreen.png", 0
+	HLoadI Img <>
 Header ends
 .data
 gameParams ScreenParams< 30, 20, 25, 0, 0, 25 >
-;snakeHead SnakeBody< 0, 0 >
 snake Snake< <0, 25> >
 field Field<>
 header Header<>

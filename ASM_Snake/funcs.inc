@@ -1,11 +1,5 @@
-.data
-	headX WORD -1
-	headY WORD -1
-
 .code
-
 impactOfkey proc  adrobj:dword, key:dword, adrdrc:dword, value:dword
-	
 	invoke GetAsyncKeyState, key
 	cmp eax,0
 	jne CHANGEDRC
@@ -13,10 +7,10 @@ impactOfkey proc  adrobj:dword, key:dword, adrdrc:dword, value:dword
 		ret
 
 	CHANGEDRC:
-	mov ecx,adrdrc
-	mov edx,value
-	mov [ecx],edx
-	jmp RETCHANGEDRC
+		mov ecx,adrdrc
+		mov edx,value
+		mov [ecx],edx
+		jmp RETCHANGEDRC
 impactOfkey endp
 
 keyboard proc adrobj:dword
@@ -26,7 +20,7 @@ keyboard proc adrobj:dword
 	invoke impactOfkey, adrobj, VK_DOWN, offset field.snakeDir, 2
 	invoke impactOfkey, adrobj, VK_LEFT, offset field.snakeDir, 3
 
-ret
+	ret
 keyboard endp
 
 moveObject proc adrobj:dword
@@ -89,47 +83,8 @@ moveObject proc adrobj:dword
 		ret
 
 	fixMoveDown:
-		;mov ebx, gameParams.sheight
-		;sub ebx, gameParams.bFact
 		mov ax, gameParams.reservedSpace
 		mov snake.Head.y, ax
 		ret
 
 moveObject endp
-
-amIDead proc adrHead:dword
-	mov edx, adrHead
-	ASSUME edx: ptr SnakeBody
-	mov cx, [edx].x
-	mov headX, cx
-	mov cx, [edx].y
-	mov headY, cx
-	mov bx, field.snakeLen
-	mov field.snakeLenTemp, bx
-	mov edx, adrHead
-	mov field.snakeAdr, edx
-	add field.snakeAdr, 4
-	LoopParts:
-		sub field.snakeLenTemp, 1
-		cmp field.snakeLenTemp, 0
-		je DoneLoop
-		mov edx, field.snakeAdr
-		ASSUME edx: ptr SnakeBody
-		mov cx, [edx].x
-		cmp headX, cx
-		jne NotDeadYet
-		mov cx, [edx].y
-		cmp headY, cx
-		je YouDied
-		jne NotDeadYet
-		NotDeadYet:
-			add field.snakeAdr, 4
-			jmp LoopParts
-	DoneLoop:
-		ret
-	ret
-	YouDied:
-		mov field.isDead, 1
-		ret
-
-amIDead endp

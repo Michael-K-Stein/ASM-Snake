@@ -13,11 +13,13 @@ include game.inc
 	MBC		DB		"Snake",	0
     MBT		DD		0001b
 	stm  SYSTEMTIME<>
-	delayMil	DWORD	250
+	delayMil	DWORD	100
 .code
 
 main proc
 	
+	invoke LoadingScreen	
+
 	invoke Load	
 
 	game:
@@ -36,7 +38,7 @@ main proc
 		jmp delay
 
 	jmp game
-	mov eax, 0 ; Reload
+	mov eax, 01 ; Reload
 	
 	delay:
 		invoke GetSystemTime, ADDR stm

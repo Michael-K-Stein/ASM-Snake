@@ -26,10 +26,10 @@
     <None Include="funcs.inc">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="subfuncs.inc">
+    <None Include="game.inc">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="game.inc">
+    <None Include="gameFuncs.inc">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
