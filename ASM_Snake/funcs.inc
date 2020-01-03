@@ -69,8 +69,8 @@ moveObject proc adrobj:dword
 	moveUp:
 		mov bx, gameParams.bFact
 		sub snake.Head.y, bx
-		;mov ebx, gameParams.sheight
-		cmp snake.Head.y, 0
+		mov ax, gameParams.reservedSpace
+		cmp snake.Head.y, ax
 		jl fixMoveUp
 		ret
 
@@ -91,7 +91,8 @@ moveObject proc adrobj:dword
 	fixMoveDown:
 		;mov ebx, gameParams.sheight
 		;sub ebx, gameParams.bFact
-		mov snake.Head.y, 0
+		mov ax, gameParams.reservedSpace
+		mov snake.Head.y, ax
 		ret
 
 moveObject endp

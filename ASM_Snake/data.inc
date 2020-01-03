@@ -5,6 +5,7 @@ ScreenParams STRUCT
 	bFact WORD ?
 	swidth WORD ?
 	sheight WORD ?
+	reservedSpace WORD ?
 ScreenParams ends
 
 SnakeBody STRUCT
@@ -52,7 +53,7 @@ Field STRUCT
 	snakeDir WORD ?
 	snakeAdr DWORD ?
 	snakeLenTemp WORD ?
-	Fruit SnakeBody<>
+	Fruit SnakeBody < >
 	isDead Byte 0
 	gray BYTE "graphics/gray.png", 0
 	grayI Img <>
@@ -61,8 +62,37 @@ Field STRUCT
 	red BYTE "graphics/red.png", 0
 	redI Img <>
 Field ends
+
+Header STRUCT
+	highScore WORD ?
+
+	highscore BYTE "graphics/header/highscore.png", 0
+	highscoreI Img <>
+
+	Hd1 BYTE "graphics/header/digits/1.png", 0
+	Hd1I Img <>
+	Hd2 BYTE "graphics/header/digits/2.png", 0
+	Hd2I Img <>
+	Hd3 BYTE "graphics/header/digits/3.png", 0
+	Hd3I Img <>
+	Hd4 BYTE "graphics/header/digits/4.png", 0
+	Hd4I Img <>
+	Hd5 BYTE "graphics/header/digits/5.png", 0
+	Hd5I Img <>
+	Hd6 BYTE "graphics/header/digits/6.png", 0
+	Hd6I Img <>
+	Hd7 BYTE "graphics/header/digits/7.png", 0
+	Hd7I Img <>
+	Hd8 BYTE "graphics/header/digits/8.png", 0
+	Hd8I Img <>
+	Hd9 BYTE "graphics/header/digits/9.png", 0
+	Hd9I Img <>
+	Hd0 BYTE "graphics/header/digits/0.png", 0
+	Hd0I Img <>
+Header ends
 .data
-gameParams ScreenParams< 30, 20, 25, 0, 0 >
+gameParams ScreenParams< 30, 20, 25, 0, 0, 25 >
 ;snakeHead SnakeBody< 0, 0 >
-snake Snake< <0, 0> >
+snake Snake< <0, 25> >
 field Field<>
+header Header<>

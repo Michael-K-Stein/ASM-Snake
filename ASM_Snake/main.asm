@@ -36,7 +36,7 @@ main proc
 		jmp delay
 
 	jmp game
-	mov eax, 01 ; Reload
+	mov eax, 0 ; Reload
 	
 	delay:
 		invoke GetSystemTime, ADDR stm
