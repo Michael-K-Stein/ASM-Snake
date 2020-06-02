@@ -41,9 +41,16 @@ SnakeBody256 STRUCT
 	BodyPart4 SnakeBody64< >
 SnakeBody256 ends
 
+SnakeBody1024 STRUCT
+	BodyPart1 SnakeBody256< >
+	BodyPart2 SnakeBody256< >
+	BodyPart3 SnakeBody256< >
+	BodyPart4 SnakeBody256< >
+SnakeBody1024 ends
+
 Snake STRUCT
 	Head SnakeBody< >
-	BodyPart1 SnakeBody256< >
+	BodyPart1 SnakeBody1024< >
 Snake ends
 
 Field STRUCT

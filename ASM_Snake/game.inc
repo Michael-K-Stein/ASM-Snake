@@ -31,7 +31,6 @@ include gameFuncs.inc
 		mov field.snakeLen, 4
 
 		mov ax, gameParams.bW
-		;mov ebx, gameParams.bFact
 		mul gameParams.bFact
 		mov gameParams.swidth, ax
 
